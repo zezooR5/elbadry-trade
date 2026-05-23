@@ -10,7 +10,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "electron:dev": "concurrently -k \"npm run dev\" \"electron .\"",
-    "electron:build": "npm run build && electron-builder"
+    "electron:build": "npm run build && electron-builder",
+    "electron:publish": "npm run build && electron-builder --publish always"
   },
   "build": {
     "appId": "com.elbadry.trade",
