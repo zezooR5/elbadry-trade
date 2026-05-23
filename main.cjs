@@ -1,9 +1,12 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, dialog } = require('electron');
 const path = require('path');
+const { autoUpdater } = require('electron-updater');
 
 // Determine if we are in development mode robustly without env vars
 const isDev = !app.isPackaged;
 
+// Configure updater logging
+autoUpdater.logger = console;
 
 let mainWindow;
 
@@ -38,6 +41,10 @@ function createWindow() {
 
   mainWindow.once('ready-to-show', () => {
     mainWindow.show();
+    // Check for updates on startup
+    if (!isDev) {
+      autoUpdater.checkForUpdatesAndNotify();
+    }
   });
 
   mainWindow.on('closed', () => {
@@ -59,5 +66,23 @@ app.whenReady().then(() => {
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
+  }
+});
+
+// Auto Updater Listeners
+autoUpdater.on('update-downloaded', (info) => {
+  if (mainWindow) {
+    dialog.showMessageBox(mainWindow, {
+      type: 'info',
+      title: 'تحديث جديد متوفر',
+      message: `تم تنزيل الإصدار الجديد (${info.version}) بنجاح. هل تريد إغلاق البرنامج وتثبيت التحديث الآن؟`,
+      buttons: ['تثبيت وإعادة التشغيل', 'لاحقاً'],
+      defaultId: 0,
+      cancelId: 1
+    }).then((result) => {
+      if (result.response === 0) {
+        autoUpdater.quitAndInstall();
+      }
+    });
   }
 });

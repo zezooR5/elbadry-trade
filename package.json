@@ -15,6 +15,13 @@
   "build": {
     "appId": "com.elbadry.trade",
     "productName": "Elbadry Trade",
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "zezooR5",
+        "repo": "elbadry-trade"
+      }
+    ],
     "directories": {
       "output": "dist-electron"
     },
@@ -38,6 +45,7 @@
   "dependencies": {
     "@rolldown/binding-win32-x64-msvc": "^1.0.2",
     "@tailwindcss/postcss": "^4.3.0",
+    "electron-updater": "^6.8.3",
     "lucide-react": "^1.16.0",
     "react": "^19.2.6",
     "react-dom": "^19.2.6"
